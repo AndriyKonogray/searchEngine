@@ -1,40 +1,58 @@
 package org.example.searchEngine.services.spider;
 
+import org.example.searchEngine.model.WebPage;
+import org.example.searchEngine.services.PageService.PageService;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.*;
 
 public class SpiderBaseImpl implements Spider {
     private static final int MAX_DEPTH = 3;
-    private HashSet<String> links = new HashSet<>();
+    private static final String USER_AGENT =
+            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1";
+    private final PageService pageService;
 
+    public SpiderBaseImpl(PageService pageService) {
+        this.pageService = pageService;
+    }
     @Override
     public void start(String URL) {
         this.getPageLinks(URL, 0);
     }
 
-    public void getPageLinks(String URL, int depth) {
-        if ((!links.contains(URL) && (depth < MAX_DEPTH))) {
-            System.out.println(">> Depth: " + depth + " [" + URL + "]");
+    private Boolean getPageLinks(String URL, int depth) {
+        if (!this.pageService.getAllLinks().contains(URL) && (depth < MAX_DEPTH)) {
+            System.out.println("Depth: " + depth + " [" + URL + "]");
             try {
-                links.add(URL);
+                this.pageService.getAllLinks().add(URL);
 
-                Document document = Jsoup.connect(URL).get();
-                Elements linksOnPage = document.select("a[href]");
-
-                depth++;
-                Iterator<Element> iterator = linksOnPage.iterator();
-                while (iterator.hasNext()) {
-                    Element page = iterator.next();
-                    getPageLinks(page.absUrl("href"), depth);
+                Connection connection = Jsoup.connect(URL).userAgent(USER_AGENT);
+                Document document = connection.get();
+                WebPage page = Optional.ofNullable(pageService.createWebPage(document)).orElseThrow();
+                if (connection.response().statusCode() == 200) {
+                    System.out.println("\n**Visiting** Received web page at " + page.getURL());
                 }
-            } catch (IOException e) {
+                if (!connection.response().contentType().contains("text/html")) {
+                    System.out.println("**Failure** Retrieved something other than HTML");
+                    return false;
+                }
+                Set<String> linksOnPage = page.getLinks();
+
+                System.out.println("Found (" + linksOnPage.size() + ") links");
+                depth++;
+                Iterator<String> iterator = linksOnPage.iterator();
+                while (iterator.hasNext()) {
+                    getPageLinks(iterator.next(), depth);
+                }
+                return true;
+            } catch (IOException | NoSuchElementException | NullPointerException e) {
                 System.err.println("For '" + URL + "': " + e.getMessage());
+                return false;
             }
         }
+        return false;
     }
 }

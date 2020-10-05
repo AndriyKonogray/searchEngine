@@ -13,8 +13,9 @@ public class IndexController {
 
     @PostMapping("/index")
     public String indexSubmit(@ModelAttribute WebPageDTO webPageDTO, Model model) {
-        WebPage page = new WebPage();
-        page.setURL(webPageDTO.getQ());
+        WebPage page = WebPage.newBuilder()
+                .setURL(webPageDTO.getQ())
+                .build();
         model.addAttribute("q", webPageDTO);
         return "indexPagesStart";
     }
