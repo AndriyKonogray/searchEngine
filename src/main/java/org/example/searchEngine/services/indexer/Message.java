@@ -1,4 +1,4 @@
-package org.example.searchEngine.services.indexer.realization;
+package org.example.searchEngine.services.indexer;
 
 import lombok.Data;
 

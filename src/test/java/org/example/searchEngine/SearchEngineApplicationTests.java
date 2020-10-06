@@ -6,8 +6,8 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.store.RAMDirectory;
 import org.example.searchEngine.model.WebPage;
 import org.example.searchEngine.services.PageService.PageServiceBaseImpl;
-import org.example.searchEngine.services.indexer.IndexService;
-import org.example.searchEngine.services.indexer.realization.Indexable;
+import org.example.searchEngine.services.indexer.IndexerBaseImpl;
+import org.example.searchEngine.services.indexer.Indexable;
 import org.example.searchEngine.services.spider.SpiderBaseImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,8 +34,8 @@ class SearchEngineApplicationTests {
 
     @Test
     public void givenSearchQueryWhenFetchedDocumentThenCorrect() throws IOException {
-        IndexService inMemoryLuceneIndex
-                = new IndexService(new RAMDirectory(), new StandardAnalyzer());
+        IndexerBaseImpl inMemoryLuceneIndex
+                = new IndexerBaseImpl(new RAMDirectory(), new StandardAnalyzer());
         WebPage page = WebPage.newBuilder()
                 .setURL("someURL")
                 .setTitle("Hello world")
@@ -53,8 +53,8 @@ class SearchEngineApplicationTests {
 
     @Test
     public void givenNoAnyMatches() throws IOException {
-        IndexService inMemoryLuceneIndex
-                = new IndexService(new RAMDirectory(), new StandardAnalyzer());
+        IndexerBaseImpl inMemoryLuceneIndex
+                = new IndexerBaseImpl(new RAMDirectory(), new StandardAnalyzer());
         WebPage page = WebPage.newBuilder()
                 .setURL("someURL")
                 .setTitle("Hello world")
@@ -72,8 +72,8 @@ class SearchEngineApplicationTests {
 
     @Test
     public void givenFuzzyQueryMatches() throws IOException {
-        IndexService inMemoryLuceneIndex
-                = new IndexService(new RAMDirectory(), new StandardAnalyzer());
+        IndexerBaseImpl inMemoryLuceneIndex
+                = new IndexerBaseImpl(new RAMDirectory(), new StandardAnalyzer());
         WebPage page1 = WebPage.newBuilder()
                 .setURL("someURL")
                 .setTitle("Hello world")
@@ -106,8 +106,8 @@ class SearchEngineApplicationTests {
 
     @Test
     public void emptyObjectsList() throws IOException {
-        IndexService inMemoryLuceneIndex
-                = new IndexService(new RAMDirectory(), new StandardAnalyzer());
+        IndexerBaseImpl inMemoryLuceneIndex
+                = new IndexerBaseImpl(new RAMDirectory(), new StandardAnalyzer());
         Set<Indexable> pages = new HashSet<>();
         inMemoryLuceneIndex.index(pages);
 
@@ -120,8 +120,8 @@ class SearchEngineApplicationTests {
 
     @Test
     public void givenPrefixQueryMatches() throws IOException {
-        IndexService inMemoryLuceneIndex
-                = new IndexService(new RAMDirectory(), new StandardAnalyzer());
+        IndexerBaseImpl inMemoryLuceneIndex
+                = new IndexerBaseImpl(new RAMDirectory(), new StandardAnalyzer());
         WebPage page1 = WebPage.newBuilder()
                 .setURL("someURL")
                 .setTitle("Yesterday was good")
@@ -154,8 +154,8 @@ class SearchEngineApplicationTests {
 
     @Test
     public void givenPhraseQueryMatches() throws IOException {
-        IndexService inMemoryLuceneIndex
-                = new IndexService(new RAMDirectory(), new StandardAnalyzer());
+        IndexerBaseImpl inMemoryLuceneIndex
+                = new IndexerBaseImpl(new RAMDirectory(), new StandardAnalyzer());
 
         WebPage page1 = WebPage.newBuilder()
                 .setURL("someURL")

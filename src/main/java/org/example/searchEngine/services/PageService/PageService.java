@@ -1,7 +1,7 @@
 package org.example.searchEngine.services.PageService;
 
 import org.example.searchEngine.model.WebPage;
-import org.example.searchEngine.services.indexer.realization.Indexable;
+import org.example.searchEngine.services.indexer.Indexable;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;

@@ -8,19 +8,15 @@ import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.*;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
-import org.example.searchEngine.services.indexer.realization.Indexable;
-import org.example.searchEngine.services.indexer.realization.Indexer;
-import org.example.searchEngine.services.indexer.realization.Message;
-import org.example.searchEngine.services.indexer.realization.Searcher;
 import org.springframework.lang.NonNull;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.example.searchEngine.services.indexer.realization.FieldNames.*;
+import static org.example.searchEngine.services.indexer.FieldNames.*;
 
-public class IndexService implements Indexer, Searcher {
+public class IndexerBaseImpl implements Indexer, Searcher {
 
     private final Directory memoryIndex;
     private final Analyzer analyzer;
@@ -40,7 +36,7 @@ public class IndexService implements Indexer, Searcher {
         ENGLISH_STOP_WORDS_SET = CharArraySet.unmodifiableSet(stopSet);
     }
 
-    public IndexService(Directory memoryIndex, Analyzer analyzer) {
+    public IndexerBaseImpl(Directory memoryIndex, Analyzer analyzer) {
         this.memoryIndex = memoryIndex;
         this.analyzer = analyzer;
     }
@@ -62,10 +58,10 @@ public class IndexService implements Indexer, Searcher {
                 .map(this::createLuceneDocumentFromMessage)
                 .collect(Collectors.toSet());
         this.indexWriter = getWriter();
-        System.out.println("IndexService: Start index documents. Size: " + documents.size());
+        System.out.println("IndexerBaseImpl: Start index documents. Size: " + documents.size());
         this.indexWriter.addDocuments(documents);
         this.indexWriter.close();
-        System.out.println("IndexService: Documents index completed");
+        System.out.println("IndexerBaseImpl: Documents index completed");
     }
 
     private IndexWriter getWriter() throws IOException {

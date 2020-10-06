@@ -1,4 +1,4 @@
-package org.example.searchEngine.services.indexer.realization;
+package org.example.searchEngine.services.indexer;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;

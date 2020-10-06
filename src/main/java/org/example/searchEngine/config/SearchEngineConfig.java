@@ -4,7 +4,7 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.store.RAMDirectory;
 import org.example.searchEngine.services.PageService.PageService;
 import org.example.searchEngine.services.PageService.PageServiceBaseImpl;
-import org.example.searchEngine.services.indexer.IndexService;
+import org.example.searchEngine.services.indexer.IndexerBaseImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,7 +17,7 @@ public class SearchEngineConfig {
     }
 
     @Bean
-    IndexService indexService() {
-        return new IndexService(new RAMDirectory(), new StandardAnalyzer());
+    IndexerBaseImpl indexService() {
+        return new IndexerBaseImpl(new RAMDirectory(), new StandardAnalyzer());
     }
 }

@@ -1,8 +1,8 @@
 package org.example.searchEngine.model;
 
 import lombok.Data;
-import org.example.searchEngine.services.indexer.realization.Indexable;
-import org.example.searchEngine.services.indexer.realization.Message;
+import org.example.searchEngine.services.indexer.Indexable;
+import org.example.searchEngine.services.indexer.Message;
 
 import java.util.Set;
 

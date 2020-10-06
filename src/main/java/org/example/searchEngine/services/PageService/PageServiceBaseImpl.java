@@ -1,8 +1,8 @@
 package org.example.searchEngine.services.PageService;
 
 import org.example.searchEngine.model.WebPage;
-import org.example.searchEngine.services.indexer.IndexService;
-import org.example.searchEngine.services.indexer.realization.Indexable;
+import org.example.searchEngine.services.indexer.IndexerBaseImpl;
+import org.example.searchEngine.services.indexer.Indexable;
 import org.example.searchEngine.services.spider.Spider;
 import org.example.searchEngine.services.spider.SpiderBaseImpl;
 import org.jsoup.nodes.Document;
@@ -20,7 +20,7 @@ public class PageServiceBaseImpl implements PageService {
     private Set<Indexable> pages = new HashSet<>();
     private Set<String> links = new HashSet<>();
     @Autowired
-    private IndexService indexService;
+    private IndexerBaseImpl indexerBaseImpl;
 
     public Set<Indexable> getPages() {
         return this.pages;
@@ -34,11 +34,11 @@ public class PageServiceBaseImpl implements PageService {
 
         Spider spider = new SpiderBaseImpl(this);
         spider.start(query);
-        indexService.index(getPages());
+        indexerBaseImpl.index(getPages());
     }
 
     public List<org.apache.lucene.document.Document> searchPage(String query) throws IOException {
-        return indexService.searchIndex(query);
+        return indexerBaseImpl.searchIndex(query);
     }
 
     public WebPage createWebPage(Document document) {
