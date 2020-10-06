@@ -62,8 +62,10 @@ public class IndexService implements Indexer, Searcher {
                 .map(this::createLuceneDocumentFromMessage)
                 .collect(Collectors.toSet());
         this.indexWriter = getWriter();
+        System.out.println("IndexService: Start index documents. Size: " + documents.size());
         this.indexWriter.addDocuments(documents);
         this.indexWriter.close();
+        System.out.println("IndexService: Documents index completed");
     }
 
     private IndexWriter getWriter() throws IOException {

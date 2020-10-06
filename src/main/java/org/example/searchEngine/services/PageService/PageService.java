@@ -1,16 +1,19 @@
 package org.example.searchEngine.services.PageService;
 
 import org.example.searchEngine.model.WebPage;
+import org.example.searchEngine.services.indexer.realization.Indexable;
 import org.jsoup.nodes.Document;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 public interface PageService {
-    Long index(WebPage page);
+    void indexPages(String query) throws IOException;
 
-    Set<WebPage> searchPage(String query);
+    List<org.apache.lucene.document.Document> searchPage(String query) throws IOException;
 
-    Set<WebPage> getPages();
+    Set<Indexable> getPages();
 
     Set<String> getAllLinks();
 

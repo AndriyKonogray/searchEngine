@@ -5,4 +5,5 @@ import lombok.Data;
 @Data
 public class WebPageDTO {
     private String q;
+    private String title;
 }

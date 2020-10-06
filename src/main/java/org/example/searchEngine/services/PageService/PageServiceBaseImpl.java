@@ -1,30 +1,44 @@
 package org.example.searchEngine.services.PageService;
 
 import org.example.searchEngine.model.WebPage;
+import org.example.searchEngine.services.indexer.IndexService;
+import org.example.searchEngine.services.indexer.realization.Indexable;
+import org.example.searchEngine.services.spider.Spider;
+import org.example.searchEngine.services.spider.SpiderBaseImpl;
 import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Component
 public class PageServiceBaseImpl implements PageService {
-    private Set<WebPage> pages = new HashSet<>();
+    private Set<Indexable> pages = new HashSet<>();
     private Set<String> links = new HashSet<>();
+    @Autowired
+    private IndexService indexService;
 
-    public Long index(WebPage page) {
-        return Long.getLong("1");
-    }
-
-    public Set<WebPage> getPages() {
-        return new HashSet<>();
+    public Set<Indexable> getPages() {
+        return this.pages;
     }
 
     public Set<String> getAllLinks() {
         return this.links;
     }
 
-    public Set<WebPage> searchPage(String query) {
-        return new HashSet<>();
+    public void indexPages(String query) throws IOException {
+
+        Spider spider = new SpiderBaseImpl(this);
+        spider.start(query);
+        indexService.index(getPages());
+    }
+
+    public List<org.apache.lucene.document.Document> searchPage(String query) throws IOException {
+        return indexService.searchIndex(query);
     }
 
     public WebPage createWebPage(Document document) {

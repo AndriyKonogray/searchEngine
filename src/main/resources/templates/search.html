@@ -3,8 +3,26 @@
 <head>
     <title>Search result page</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        li {
+            list-style-type: none
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
-<p th:text="'Looking: ' + ${q} + '!'"/>
+<div th:if="${!webPageDTOList.isEmpty()}">
+    <h1>Welcome</h1>
+    <ul>
+        <li th:each="item : *{webPageDTOList}">
+            <a style="color: blue; font-size: 21px;" th:href="${item.q}" th:text="${item.title}"></a>
+            <br>
+            <a style="color: green; font-size: 14px;" th:href="${item.q}" th:text="${item.q}"></a>
+        </li>
+    </ul>
+</div>
 </body>
 </html>

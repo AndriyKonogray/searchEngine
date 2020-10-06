@@ -1,5 +1,6 @@
 package org.example.searchEngine.services.spider;
 
+import org.apache.commons.validator.routines.UrlValidator;
 import org.example.searchEngine.model.WebPage;
 import org.example.searchEngine.services.PageService.PageService;
 import org.jsoup.Connection;
@@ -14,9 +15,12 @@ public class SpiderBaseImpl implements Spider {
     private static final String USER_AGENT =
             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1";
     private final PageService pageService;
+    private UrlValidator urlValidator;
 
     public SpiderBaseImpl(PageService pageService) {
         this.pageService = pageService;
+        String[] schemes = {"http","https"};
+        this.urlValidator = new UrlValidator(schemes);
     }
 
     @Override
@@ -25,7 +29,7 @@ public class SpiderBaseImpl implements Spider {
     }
 
     public Boolean startRecursiveSpider(String URL, int depth) {
-        if (!this.pageService.getAllLinks().contains(URL) && (depth < MAX_DEPTH)) {
+        if (this.urlValidator.isValid(URL) && !this.pageService.getAllLinks().contains(URL) && (depth < MAX_DEPTH)) {
             System.out.println("Depth: " + depth + " [" + URL + "]");
             try {
                 this.pageService.getAllLinks().add(URL);
