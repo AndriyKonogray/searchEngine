@@ -18,12 +18,15 @@ public class PageServiceBaseImpl implements PageService {
     public Set<WebPage> getPages() {
         return new HashSet<>();
     }
+
     public Set<String> getAllLinks() {
         return this.links;
     }
+
     public Set<WebPage> searchPage(String query) {
         return new HashSet<>();
     }
+
     public WebPage createWebPage(Document document) {
         WebPage page = WebPage.newBuilder()
                 .setBody(document.body().outerHtml())

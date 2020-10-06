@@ -18,6 +18,7 @@ public class SpiderBaseImpl implements Spider {
     public SpiderBaseImpl(PageService pageService) {
         this.pageService = pageService;
     }
+
     @Override
     public void start(String URL) {
         this.startRecursiveSpider(URL, 0);

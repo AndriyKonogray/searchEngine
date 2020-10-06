@@ -22,25 +22,25 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 class SearchEngineApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
-	@Test
-	void testSpiderBaseImpl() {
-		SpiderBaseImpl spider = new SpiderBaseImpl(new PageServiceBaseImpl());
-		assert(spider.startRecursiveSpider("https://spring.io/", 2));
-	}
+    @Test
+    void testSpiderBaseImpl() {
+        SpiderBaseImpl spider = new SpiderBaseImpl(new PageServiceBaseImpl());
+        assert (spider.startRecursiveSpider("https://spring.io/", 2));
+    }
 
     @Test
     public void givenSearchQueryWhenFetchedDocumentThenCorrect() throws IOException {
         IndexService inMemoryLuceneIndex
                 = new IndexService(new RAMDirectory(), new StandardAnalyzer());
-		WebPage page = WebPage.newBuilder()
-				.setURL("someURL")
-				.setTitle("Hello world")
-				.setBodyWithoutTag("Hello world")
-				.build();
+        WebPage page = WebPage.newBuilder()
+                .setURL("someURL")
+                .setTitle("Hello world")
+                .setBodyWithoutTag("Hello world")
+                .build();
         inMemoryLuceneIndex.index(page);
 
         List<Document> documents
@@ -51,151 +51,151 @@ class SearchEngineApplicationTests {
                 documents.get(0).get("title"));
     }
 
-	@Test
-	public void givenNoAnyMatches() throws IOException {
-		IndexService inMemoryLuceneIndex
-				= new IndexService(new RAMDirectory(), new StandardAnalyzer());
-		WebPage page = WebPage.newBuilder()
-				.setURL("someURL")
-				.setTitle("Hello world")
-				.setBodyWithoutTag("Hello world")
-				.build();
-		inMemoryLuceneIndex.index(page);
+    @Test
+    public void givenNoAnyMatches() throws IOException {
+        IndexService inMemoryLuceneIndex
+                = new IndexService(new RAMDirectory(), new StandardAnalyzer());
+        WebPage page = WebPage.newBuilder()
+                .setURL("someURL")
+                .setTitle("Hello world")
+                .setBodyWithoutTag("Hello world")
+                .build();
+        inMemoryLuceneIndex.index(page);
 
-		List<Document> documents
-				= inMemoryLuceneIndex.searchIndex("wold");
+        List<Document> documents
+                = inMemoryLuceneIndex.searchIndex("wold");
 
-		assertEquals(
-				1,
-				documents.size());
-	}
+        assertEquals(
+                1,
+                documents.size());
+    }
 
-	@Test
-	public void givenFuzzyQueryMatches() throws IOException {
-		IndexService inMemoryLuceneIndex
-				= new IndexService(new RAMDirectory(), new StandardAnalyzer());
-		WebPage page1 = WebPage.newBuilder()
-				.setURL("someURL")
-				.setTitle("Hello world")
-				.setBodyWithoutTag("Hello world")
-				.build();
-		WebPage page2 = WebPage.newBuilder()
-				.setURL("someURL")
-				.setTitle("Great world")
-				.setBodyWithoutTag("Great world")
-				.build();
-		WebPage page3 = WebPage.newBuilder()
-				.setURL("someURL")
-				.setTitle("Greed")
-				.setBodyWithoutTag("Greed")
-				.build();
-		Set<Indexable> pages = new HashSet<>();
-		pages.add(page1);
-		pages.add(page2);
-		pages.add(page3);
-		inMemoryLuceneIndex.index(pages);
+    @Test
+    public void givenFuzzyQueryMatches() throws IOException {
+        IndexService inMemoryLuceneIndex
+                = new IndexService(new RAMDirectory(), new StandardAnalyzer());
+        WebPage page1 = WebPage.newBuilder()
+                .setURL("someURL")
+                .setTitle("Hello world")
+                .setBodyWithoutTag("Hello world")
+                .build();
+        WebPage page2 = WebPage.newBuilder()
+                .setURL("someURL")
+                .setTitle("Great world")
+                .setBodyWithoutTag("Great world")
+                .build();
+        WebPage page3 = WebPage.newBuilder()
+                .setURL("someURL")
+                .setTitle("Greed")
+                .setBodyWithoutTag("Greed")
+                .build();
+        Set<Indexable> pages = new HashSet<>();
+        pages.add(page1);
+        pages.add(page2);
+        pages.add(page3);
+        inMemoryLuceneIndex.index(pages);
 
-		List<Document> documents
-				= inMemoryLuceneIndex.searchIndex("great");
+        List<Document> documents
+                = inMemoryLuceneIndex.searchIndex("great");
 
 
-		assertEquals(
-				2,
-				documents.size());
-	}
+        assertEquals(
+                2,
+                documents.size());
+    }
 
-	@Test
-	public void emptyObjectsList() throws IOException {
-		IndexService inMemoryLuceneIndex
-				= new IndexService(new RAMDirectory(), new StandardAnalyzer());
-		Set<Indexable> pages = new HashSet<>();
-		inMemoryLuceneIndex.index(pages);
+    @Test
+    public void emptyObjectsList() throws IOException {
+        IndexService inMemoryLuceneIndex
+                = new IndexService(new RAMDirectory(), new StandardAnalyzer());
+        Set<Indexable> pages = new HashSet<>();
+        inMemoryLuceneIndex.index(pages);
 
-		List<Document> documents
-				= inMemoryLuceneIndex.searchIndex("great");
-		assertEquals(
-				0,
-				documents.size());
-	}
+        List<Document> documents
+                = inMemoryLuceneIndex.searchIndex("great");
+        assertEquals(
+                0,
+                documents.size());
+    }
 
-	@Test
-	public void givenPrefixQueryMatches() throws IOException {
-		IndexService inMemoryLuceneIndex
-				= new IndexService(new RAMDirectory(), new StandardAnalyzer());
-		WebPage page1 = WebPage.newBuilder()
-				.setURL("someURL")
-				.setTitle("Yesterday was good")
-				.setBodyWithoutTag("Yesterday was good")
-				.build();
-		WebPage page2 = WebPage.newBuilder()
-				.setURL("someURL")
-				.setTitle("Yes it is can be possible")
-				.setBodyWithoutTag("Yes it is can be possible")
-				.build();
-		WebPage page3 = WebPage.newBuilder()
-				.setURL("someURL")
-				.setTitle("Welcome to daily")
-				.setBodyWithoutTag("Welcome to daily")
-				.build();
-		Set<Indexable> pages = new HashSet<>();
-		pages.add(page1);
-		pages.add(page2);
-		pages.add(page3);
-		inMemoryLuceneIndex.index(pages);
+    @Test
+    public void givenPrefixQueryMatches() throws IOException {
+        IndexService inMemoryLuceneIndex
+                = new IndexService(new RAMDirectory(), new StandardAnalyzer());
+        WebPage page1 = WebPage.newBuilder()
+                .setURL("someURL")
+                .setTitle("Yesterday was good")
+                .setBodyWithoutTag("Yesterday was good")
+                .build();
+        WebPage page2 = WebPage.newBuilder()
+                .setURL("someURL")
+                .setTitle("Yes it is can be possible")
+                .setBodyWithoutTag("Yes it is can be possible")
+                .build();
+        WebPage page3 = WebPage.newBuilder()
+                .setURL("someURL")
+                .setTitle("Welcome to daily")
+                .setBodyWithoutTag("Welcome to daily")
+                .build();
+        Set<Indexable> pages = new HashSet<>();
+        pages.add(page1);
+        pages.add(page2);
+        pages.add(page3);
+        inMemoryLuceneIndex.index(pages);
 
-		List<Document> documents
-				= inMemoryLuceneIndex.searchIndex("yes");
+        List<Document> documents
+                = inMemoryLuceneIndex.searchIndex("yes");
 
-		assertEquals(
-				2,
-				documents.size());
-		assertEquals("Yes it is can be possible", documents.get(0).get("title"));
-	}
+        assertEquals(
+                2,
+                documents.size());
+        assertEquals("Yes it is can be possible", documents.get(0).get("title"));
+    }
 
-	@Test
-	public void givenPhraseQueryMatches() throws IOException {
-		IndexService inMemoryLuceneIndex
-				= new IndexService(new RAMDirectory(), new StandardAnalyzer());
+    @Test
+    public void givenPhraseQueryMatches() throws IOException {
+        IndexService inMemoryLuceneIndex
+                = new IndexService(new RAMDirectory(), new StandardAnalyzer());
 
-		WebPage page1 = WebPage.newBuilder()
-				.setURL("someURL")
-				.setTitle("Yesterday was good")
-				.setBodyWithoutTag("Yesterday was good")
-				.build();
-		WebPage page2 = WebPage.newBuilder()
-				.setURL("someURL")
-				.setTitle("Yes it is can be possible")
-				.setBodyWithoutTag("Yes it is can be possible")
-				.build();
-		WebPage page3 = WebPage.newBuilder()
-				.setURL("someURL")
-				.setTitle("Welcome to daily")
-				.setBodyWithoutTag("Welcome to daily")
-				.build();
-		Set<Indexable> pages = new HashSet<>();
-		pages.add(page1);
-		pages.add(page2);
-		pages.add(page3);
-		inMemoryLuceneIndex.index(pages);
+        WebPage page1 = WebPage.newBuilder()
+                .setURL("someURL")
+                .setTitle("Yesterday was good")
+                .setBodyWithoutTag("Yesterday was good")
+                .build();
+        WebPage page2 = WebPage.newBuilder()
+                .setURL("someURL")
+                .setTitle("Yes it is can be possible")
+                .setBodyWithoutTag("Yes it is can be possible")
+                .build();
+        WebPage page3 = WebPage.newBuilder()
+                .setURL("someURL")
+                .setTitle("Welcome to daily")
+                .setBodyWithoutTag("Welcome to daily")
+                .build();
+        Set<Indexable> pages = new HashSet<>();
+        pages.add(page1);
+        pages.add(page2);
+        pages.add(page3);
+        inMemoryLuceneIndex.index(pages);
 
-		Term term = new Term("title", "yes");
+        Term term = new Term("title", "yes");
 
-		String s = "Welcome daily";
+        String s = "Welcome daily";
 
-		List<Document> documents
-				= inMemoryLuceneIndex.searchIndex(s);
+        List<Document> documents
+                = inMemoryLuceneIndex.searchIndex(s);
 
-		assertEquals(
-				1,
-				documents.size());
-		assertEquals("Welcome to daily", documents.get(0).get("title"));
+        assertEquals(
+                1,
+                documents.size());
+        assertEquals("Welcome to daily", documents.get(0).get("title"));
 
-		s = "welcome to daily";
-		documents = inMemoryLuceneIndex.searchIndex(s);
-		assertEquals("Welcome to daily", documents.get(0).get("title"));
+        s = "welcome to daily";
+        documents = inMemoryLuceneIndex.searchIndex(s);
+        assertEquals("Welcome to daily", documents.get(0).get("title"));
 
-		s = "Yes possible";
-		documents = inMemoryLuceneIndex.searchIndex(s);
-		assertEquals("Yes it is can be possible", documents.get(0).get("title"));
-	}
+        s = "Yes possible";
+        documents = inMemoryLuceneIndex.searchIndex(s);
+        assertEquals("Yes it is can be possible", documents.get(0).get("title"));
+    }
 }

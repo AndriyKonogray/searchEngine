@@ -26,7 +26,7 @@ public class IndexService implements Indexer, Searcher {
     private final Analyzer analyzer;
     private IndexWriter indexWriter;
     private final int MAX_DOCUMENT_NUMBER = 10;
-    public static final CharArraySet ENGLISH_STOP_WORDS_SET;
+    private static final CharArraySet ENGLISH_STOP_WORDS_SET;
 
     static {
         final List<String> stopWords = Arrays.asList(

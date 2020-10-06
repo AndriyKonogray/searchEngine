@@ -9,4 +9,6 @@ import java.util.List;
 public interface Searcher {
 
     List<Document> searchIndex(Query query) throws IOException;
+
+    List<Document> searchIndex(String text) throws IOException;
 }

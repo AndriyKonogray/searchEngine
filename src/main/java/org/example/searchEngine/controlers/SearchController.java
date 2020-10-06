@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class SearchController {
 
     @GetMapping("/search")
-    public String search(@RequestParam(name="q") String q, Model model) {
+    public String search(@RequestParam(name = "q") String q, Model model) {
         model.addAttribute("q", q);
         return "search";
     }
