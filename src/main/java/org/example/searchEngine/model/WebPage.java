@@ -1,11 +1,13 @@
 package org.example.searchEngine.model;
 
 import lombok.Data;
+import org.example.searchEngine.services.indexer.realization.Indexable;
+import org.example.searchEngine.services.indexer.realization.Message;
 
 import java.util.Set;
 
 @Data
-public class WebPage {
+public class WebPage implements Indexable {
     private String URL;
     private String bodyWithoutTag;
     private Set<String> links;
@@ -13,6 +15,15 @@ public class WebPage {
     private String body;
 
     private WebPage() {
+    }
+
+    @Override
+    public Message toMessage() {
+        return Message.newBuilder()
+                .setURL(this.getURL())
+                .setTitle(this.getTitle())
+                .setBody(this.getBodyWithoutTag())
+                .build();
     }
 
     public static Builder newBuilder() {
@@ -44,12 +55,16 @@ public class WebPage {
             return this;
         }
 
-        public Builder setBody(String title) {
-            WebPage.this.title = title;
+        public Builder setBody(String body) {
+            WebPage.this.body = body;
 
             return this;
         }
+
         public WebPage build() {
+            if (WebPage.this.getBodyWithoutTag() == null && WebPage.this.body != null) {
+                setBodyWithoutTag(WebPage.this.body);
+            }
             return WebPage.this;
         }
     }

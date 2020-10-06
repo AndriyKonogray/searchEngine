@@ -20,10 +20,10 @@ public class SpiderBaseImpl implements Spider {
     }
     @Override
     public void start(String URL) {
-        this.getPageLinks(URL, 0);
+        this.startRecursiveSpider(URL, 0);
     }
 
-    private Boolean getPageLinks(String URL, int depth) {
+    public Boolean startRecursiveSpider(String URL, int depth) {
         if (!this.pageService.getAllLinks().contains(URL) && (depth < MAX_DEPTH)) {
             System.out.println("Depth: " + depth + " [" + URL + "]");
             try {
@@ -45,7 +45,7 @@ public class SpiderBaseImpl implements Spider {
                 depth++;
                 Iterator<String> iterator = linksOnPage.iterator();
                 while (iterator.hasNext()) {
-                    getPageLinks(iterator.next(), depth);
+                    startRecursiveSpider(iterator.next(), depth);
                 }
                 return true;
             } catch (IOException | NoSuchElementException | NullPointerException e) {
